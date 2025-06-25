@@ -37,9 +37,10 @@ class ScreenCapture:
         self.sct.close()
 
 
-# sc = ScreenCapture(scale_factor=2)
-# frame = sc.capture_screen()
-# cv2.imshow("Captured Frame", frame)
-# if cv2.waitKey(0) & 0xFF == ord('q'):
-#     sc.release()
-# cv2.destroyAllWindows()
+if __name__ == "__main__":
+    sc = ScreenCapture(scale_factor=2)
+    frame = sc.capture_screen()
+    cv2.imshow("Captured Frame", frame)
+    if cv2.waitKey(0) & 0xFF == ord("q"):
+        sc.release()
+    cv2.destroyAllWindows()

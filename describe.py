@@ -7,11 +7,17 @@ class DescribeBackend:
     DescribeBackend is a class that manages the description of images or screenshots.
     """
 
-    def __init__(self, dump_path="description.json", descriptor="你需要提取我的工作，并总结我在哪个时间段(相似工作应当放在同一个时间段下)主要干了什么(从核心任务，具体工作，关联工具这三个方面总结)，下面是我的屏幕截图日志："):
+    def __init__(
+        self,
+        dump_path="description.json",
+        descriptor="你需要提取我的工作，并总结我在哪个时间段(相似工作应当放在同一个时间段下)主要干了什么(从核心任务，具体工作，关联工具这三个方面总结)，下面是我的屏幕截图日志：",
+        llm_backend=None,
+    ):
         self.dump_path = dump_path
         self.description = {}
         self.token_len = {}
         self.descriptor = descriptor
+        self.llm_backend = llm_backend
 
     def get_description(self, max_length=10000):
         """
@@ -35,7 +41,7 @@ class DescribeBackend:
                 break
             block_description.append(
                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(key))
-                + '\n'
+                + "\n"
                 + self.description.pop(key)
             )
 
@@ -46,16 +52,15 @@ class DescribeBackend:
         self.description[current_time] = description
         self.token_len[current_time] = len(description.split())  # simply split by space
 
-    def summarize(self, llm_backend):
+    def summarize(self):
         screen_summary = []
         while len(self.description) != 0:
             screen_summary.append(
-                llm_backend.send_msg_to_backend(
-                    self.descriptor
-                    + self.get_description(max_length=10000)
+                self.llm_backend.send_msg_to_backend(
+                    self.descriptor + self.get_description(max_length=10000)
                 )
             )
-        
+
         summary = ""
         if not screen_summary:
             summary = "No summary available, check if something went wrong in the code or the LLM backend server."
@@ -63,7 +68,7 @@ class DescribeBackend:
             summary = screen_summary[0]
         else:
             summary = "\n\n".join(screen_summary)
-        
+
         return summary
 
     def dump(self):
