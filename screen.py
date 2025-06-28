@@ -7,6 +7,9 @@ import numpy as np
 
 
 class ScreenCapture:
+    """
+    Mainly time consuming is the mss screen capture
+    """
     def __init__(self, scale_factor=1, color=None):
         self.scale_factor = scale_factor
         self.color = color

@@ -10,14 +10,12 @@ class Timestamp:
     def __init__(self, interval_minutes=5):
         self.last_day = datetime.now()  # Store the current timestamp initially
         self.last_capture = datetime.now()  # Store the current timestamp initially
-        self.interval_minutes = (
-            interval_minutes  # Interval in minutes for capturing the screen
-        )
+        self.interval_minutes = interval_minutes  # Interval in minutes for capturing the screen
 
     def now(self):
         return datetime.now()
 
-    def strf_now(self, fmt="%Y-%m-%d %H:%M:%S"):
+    def strf_now(self, fmt="%Y-%m-%d_%H:%M:%S"):
         return self.now().strftime(fmt)
 
     def wait_for_next_capture(self):
@@ -35,7 +33,7 @@ class Timestamp:
 
     def is_past_a_day(self):
         current_time = datetime.now()
-        if current_time - self.last_day >= timedelta(hours=24):
+        if current_time - self.last_day >= timedelta(hours=2):
             self.last_day = current_time
             return True
         return False
